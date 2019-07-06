@@ -24,6 +24,7 @@ git clone --branch 12.0 --depth 1 --single-branch https://github.com/OCA/server-
 git clone --branch 12.0 --depth 1 --single-branch https://github.com/OCA/bank-payment.git
 git clone --branch 12.0 --depth 1 --single-branch https://github.com/OCA/partner-contact.git
 git clone --branch 12.0 --depth 1 --single-branch https://github.com/OCA/community-data-files.git
+git clone --branch 12.0 --depth 1 --single-branch https://github.com/odoomates/odooapps.git
 cd l10n_cr
 mv cr_electronic_invoice cr_electronic_invoice_qweb_fe cr_electronic_invoice_pos account_invoice_import base_business_document_import base_business_document_import_phone l10n_cr_country_codes res_currency_cr_adapter /usr/lib/python3/dist-packages/odoo/addons/
 cd ..
@@ -34,4 +35,5 @@ mv community-data-files/uom_unece/ /usr/lib/python3/dist-packages/odoo/addons/
 mv community-data-files/account_tax_unece/ /usr/lib/python3/dist-packages/odoo/addons/
 mv community-data-files/base_unece/ /usr/lib/python3/dist-packages/odoo/addons/
 mv bank-payment/account_payment_mode/ /usr/lib/python3/dist-packages/odoo/addons/
+mv odooapps/accounting_pdf_reports/ /usr/lib/python3/dist-packages/odoo/addons/
 systemctl restart odoo
