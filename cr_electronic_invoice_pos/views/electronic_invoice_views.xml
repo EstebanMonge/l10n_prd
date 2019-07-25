@@ -12,20 +12,63 @@
             </field>
         </record>
 
-        <!--record id="view_pos_config_electronic_invoice_form" model="ir.ui.view">
+        <record id="view_pos_config_electronic_invoice_form" model="ir.ui.view">
             <field name="name">pos.config.electronic.invoice.form</field>
             <field name="model">pos.config</field>
             <field name="inherit_id" ref="point_of_sale.pos_config_view_form"/>
             <field name="arch" type="xml">
-                <field name="default_fiscal_position_id" position="after">
-                    <field name="sucursal"/>
-                    <field name="terminal"/>
-                </field>
-                <field name="sequence_id" position="after">
-                    <field name="return_sequence_id"/>
-                </field>
+                <xpath expr="//form/sheet" position="inside">
+                    <h2>Electronic Invoice</h2>
+                    <div class="row mt16 o_settings_container" id="electronic_invoice">
+                        <div class="col-12 col-lg-6 o_setting_box">
+                            <!--div class="o_setting_left_pane">
+                                <field name="is_header_or_footer"/>
+                            </div-->
+                            <div class="o_setting_right_pane">
+                                <div class="content-group mt16">
+                                    <div>
+                                        <label string="Sucursal" for="sucursal" class="col-lg-2 o_light_label"/>
+                                        <field name="sucursal" placeholder="e.g. 1"/>
+                                    </div>
+                                    <div>
+                                        <label string="Terminal" for="terminal" class="col-lg-2 o_light_label"/>
+                                        <field name="terminal" placeholder="e.g. 2"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-lg-6 o_setting_box">
+                            <!--div class="o_setting_left_pane">
+                                <field name="is_header_or_footer"/>
+                            </div-->
+                            <div class="o_setting_right_pane">
+                                <div class="content-group mt16">
+                                    <div>
+                                        Secuencia de Facturas Electrónicas
+                                    </div>
+                                    <div>
+                                        <field name="FE_sequence_id"/>
+                                    </div>
+                                    <div>
+                                        Secuencia de Notas de Crédito Electrónicas
+                                    </div>
+                                    <div>
+                                        <field name="NC_sequence_id"/>
+                                    </div>
+                                    <div>
+                                        Secuencia de Tiquetes Electrónicos
+                                    </div>
+                                    <div>
+                                        <field name="TE_sequence_id"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </xpath>
             </field>
-        </record-->
+        </record>
 
         <record id="view_pos_order_electronic_invoice_form" model="ir.ui.view">
             <field name="name">pos.order.electronic.invoice.form</field>
@@ -76,8 +119,10 @@
                 <div class="article" t-att-data-oe-model="o and o._name" t-att-data-oe-id="o and o.id" t-att-data-oe-lang="o and o.env.context.get('lang')">
                     <div class="page">
                         <div class="text-center">
-                            FACTURA ELECTRONICA<br/>
-                            Version Documento: 4.2<br/>
+                            <t t-if="o.tipo_documento=='FE'">FACTURA ELECTRONICA</t>
+                            <t t-if="o.tipo_documento=='TE'">TIQUETE ELECTRONICO</t>
+                            <br/>
+                            Version Documento: 4.3<br/>
                             <h2 t-esc="o.user_id.company_id.commercial_name"/>
                             <t t-esc="o.user_id.company_id.name"/><br/>
                             Ced.Jur: <t t-esc="o.user_id.company_id.vat"/><br/>
@@ -89,18 +134,18 @@
                                     <td>Clave Numerica:</td>
                                 </tr>
                                 <tr>
-                                    <td><t t-esc="o.name[0:25]"/></td>
+                                    <td><t t-esc="o.number_electronic[0:25]"/></td>
                                 </tr>
                                 <tr>
-                                    <td><t t-esc="o.name[25:]"/></td>
+                                    <td><t t-esc="o.number_electronic[25:]"/></td>
                                 </tr>
                             </table>
                         </div>
                         <br/>
-                            <table >
+                            <table>
                                 <tr>
                                     <td>Factura:</td>
-                                    <td><t t-esc="o.name[21:41]"/></td>
+                                    <td><t t-esc="o.number_electronic[21:41]"/></td>
                                 </tr>
                                 <tr>
                                     <td>Cajero:</td>
@@ -110,18 +155,18 @@
                                     <td>Fecha:</td>
                                     <td><span t-field="o.date_order"/></td>
                                 </tr>
-                                            <t t-if="o.partner_id">
-                                            <tr>
-                                                <td>Cliente:</td>
-                                                <td><span t-field="o.partner_id.name"/></td>
-                                            </tr>
-                                            </t>
-                                            <t t-if="o.partner_id.vat">
-                                            <tr>
-                                                <td>Cedula:</td>
-                                                <td><span t-field="o.partner_id.vat"/><br/></td>
-                                            </tr>
-                                            </t>
+                                <t t-if="o.partner_id">
+                                    <tr>
+                                        <td>Cliente:</td>
+                                        <td><span t-field="o.partner_id.name"/></td>
+                                    </tr>
+                                    </t>
+                                    <t t-if="o.partner_id.vat">
+                                    <tr>
+                                        <td>Cedula:</td>
+                                        <td><span t-field="o.partner_id.vat"/><br/></td>
+                                    </tr>
+                                </t>
                             </table>
 
                         <div class="row">
@@ -159,7 +204,7 @@
                                     </td>
                                 </tr>
                                 <tr class="border-black">
-                                    <td colspan="2"><strong>I.V.I.</strong></td>
+                                    <td colspan="2"><strong>IVA y Servicio incluidos</strong></td>
                                     <td class="text-right">
                                         <strong t-esc="o.amount_tax"/>
                                     </td>
