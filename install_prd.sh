@@ -36,4 +36,8 @@ mv community-data-files/account_tax_unece/ /usr/lib/python3/dist-packages/odoo/a
 mv community-data-files/base_unece/ /usr/lib/python3/dist-packages/odoo/addons/
 mv bank-payment/account_payment_mode/ /usr/lib/python3/dist-packages/odoo/addons/
 mv odooapps/accounting_pdf_reports/ /usr/lib/python3/dist-packages/odoo/addons/
+mv odooapps/om_account_accountant/ /usr/lib/python3/dist-packages/odoo/addons/
+mv odooapps/om_account_asset/ /usr/lib/python3/dist-packages/odoo/addons/
+mv odooapps/om_account_budget/ /usr/lib/python3/dist-packages/odoo/addons/
+
 systemctl restart odoo
