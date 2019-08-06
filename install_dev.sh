@@ -19,14 +19,14 @@ rm -r l10n_cr server-tools partner-contact bank-payment community-data-files
 cd /usr/lib/python3/dist-packages/odoo/addons/
 rm -r cr_electronic_invoice cr_electronic_invoice_qweb_fe cr_electronic_invoice_pos account_invoice_import base_business_document_import base_business_document_import_phone l10n_cr_country_codes res_currency_cr_adapter onchange_helper base_vat_sanitized account_payment_partner uom_unece account_tax_unece base_unece account_payment_mode
 cd $HOME 
-git clone --branch 12.0 --depth 1 --single-branch https://github.com/odoocr/l10n_cr.git 
+git clone --branch 12.0 --depth 1 --single-branch https://github.com/EstebanMonge/l10n_cr.git 
 git clone --branch 12.0 --depth 1 --single-branch https://github.com/OCA/server-tools.git
 git clone --branch 12.0 --depth 1 --single-branch https://github.com/OCA/bank-payment.git
 git clone --branch 12.0 --depth 1 --single-branch https://github.com/OCA/partner-contact.git
 git clone --branch 12.0 --depth 1 --single-branch https://github.com/OCA/community-data-files.git
 git clone --branch 12.0 --depth 1 --single-branch https://github.com/odoomates/odooapps.git
 cd l10n_cr
-mv cr_electronic_invoice cr_electronic_invoice_qweb_fe cr_electronic_invoice_pos account_invoice_import base_business_document_import base_business_document_import_phone l10n_cr_country_codes res_currency_cr_adapter /usr/lib/python3/dist-packages/odoo/addons/
+mv cr_electronic_invoice cr_electronic_invoice_qweb_fe cr_electronic_invoice_pos l10n_cr_country_codes l10n_cr_hacienda_info_query res_currency_cr_adapter /usr/lib/python3/dist-packages/odoo/addons/
 cd ..
 mv server-tools/onchange_helper/ /usr/lib/python3/dist-packages/odoo/addons/
 mv partner-contact/base_vat_sanitized/ /usr/lib/python3/dist-packages/odoo/addons/
