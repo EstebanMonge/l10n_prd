@@ -19,6 +19,8 @@ rm -r l10n_prd server-tools partner-contact bank-payment community-data-files
 cd /usr/lib/python3/dist-packages/odoo/addons/
 rm -r cr_electronic_invoice cr_electronic_invoice_qweb_fe cr_electronic_invoice_pos account_invoice_import base_business_document_import base_business_document_import_phone l10n_cr_country_codes res_currency_cr_adapter onchange_helper base_vat_sanitized account_payment_partner uom_unece account_tax_unece base_unece account_payment_mode
 cd $HOME 
+wget https://raw.githubusercontent.com/EstebanMonge/l10n_prd/master/upgrade_odoo_dbs.sh
+wget https://raw.githubusercontent.com/EstebanMonge/l10n_prd/master/show_open_pos.sh
 git clone https://github.com/EstebanMonge/l10n_prd.git
 git clone --branch 12.0 --depth 1 --single-branch https://github.com/OCA/server-tools.git
 git clone --branch 12.0 --depth 1 --single-branch https://github.com/OCA/bank-payment.git
