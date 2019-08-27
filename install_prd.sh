@@ -27,7 +27,7 @@ git clone --branch 12.0 --depth 1 --single-branch https://github.com/OCA/bank-pa
 git clone --branch 12.0 --depth 1 --single-branch https://github.com/OCA/partner-contact.git
 git clone --branch 12.0 --depth 1 --single-branch https://github.com/OCA/community-data-files.git
 git clone --branch 12.0 --depth 1 --single-branch https://github.com/odoomates/odooapps.git
-cd l10n_cr
+cd l10n_prd
 mv cr_electronic_invoice cr_electronic_invoice_qweb_fe cr_electronic_invoice_pos l10n_cr_country_codes l10n_cr_hacienda_info_query res_currency_cr_adapter /usr/lib/python3/dist-packages/odoo/addons/
 cd ..
 mv server-tools/onchange_helper/ /usr/lib/python3/dist-packages/odoo/addons/
