@@ -15,6 +15,9 @@ apt-get -y remove --purge python3-openssl python3-cryptography
 apt-get -y --purge autoremove
 pip3 install xmlsig
 pip3 install pyOpenSSL
+pip3 install xlsxwriter
+pip3 install xlrd
+pip3 install xlwt
 rm -r l10n_cr server-tools partner-contact bank-payment community-data-files odooapps
 cd /usr/lib/python3/dist-packages/odoo/addons/
 rm -r cr_customer_query cr_electronic_invoice cr_electronic_invoice_qweb_fe cr_electronic_invoice_pos l10n_cr_country_codes res_currency_cr_adapter onchange_helper base_vat_sanitized account_payment_partner uom_unece account_tax_unece base_unece account_payment_mode accounting_pdf_reports om_account_accountant om_account_asset om_account_budget l10n_cr_hacienda_info_query
