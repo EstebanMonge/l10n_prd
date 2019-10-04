@@ -13,6 +13,9 @@ dpkg -i wkhtmltox_0.12.5-1.stretch_amd64.deb
 apt-get -fy install
 apt-get -y remove --purge python3-openssl python3-cryptography
 apt-get -y --purge autoremove
+pip3 install xlsxwriter
+pip3 install xlrd
+pip3 install xlwt
 pip3 install xmlsig
 pip3 install pyOpenSSL
 rm -r l10n_cr server-tools partner-contact bank-payment community-data-files odooapps
