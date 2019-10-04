@@ -4,7 +4,8 @@ rm /etc/apt/sources.list.d/odoo.list
 rm /etc/apt/sources.list.d/backports.list
 echo "deb http://nightly.odoo.com/12.0/nightly/deb/ ./" >> /etc/apt/sources.list.d/odoo.list
 echo "deb http://ftp.debian.org/debian stretch-backports main" >> /etc/apt/sources.list.d/backports.list
-apt-get update && apt-get -y install odoo postgresql unzip git python3-phonenumbers python3-num2words python3-jsonschema python3-pip
+apt-get update
+apt-get -y install odoo postgresql unzip git python3-phonenumbers python3-num2words python3-jsonschema python3-pip
 if [[ ! -f wkhtmltox_0.12.5-1.stretch_amd64.deb ]]
 then
 wget https://downloads.wkhtmltopdf.org/0.12/0.12.5/wkhtmltox_0.12.5-1.stretch_amd64.deb

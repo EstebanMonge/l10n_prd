@@ -4,7 +4,8 @@ rm /etc/apt/sources.list.d/odoo.list
 rm /etc/apt/sources.list.d/backports.list
 echo "deb http://nightly.odoo.com/12.0/nightly/deb/ ./" >> /etc/apt/sources.list.d/odoo.list
 echo "deb http://ftp.debian.org/debian stretch-backports main" >> /etc/apt/sources.list.d/backports.list
-apt-get update && apt-get -y install odoo postgresql unzip git python3-phonenumbers python3-num2words python3-jsonschema python3-pip
+apt-get update
+apt-get -y install odoo postgresql unzip git python3-phonenumbers python3-num2words python3-jsonschema python3-pip
 if [[ ! -f wkhtmltox_0.12.5-1.stretch_amd64.deb ]]
 then
 wget https://downloads.wkhtmltopdf.org/0.12/0.12.5/wkhtmltox_0.12.5-1.stretch_amd64.deb
@@ -13,11 +14,11 @@ dpkg -i wkhtmltox_0.12.5-1.stretch_amd64.deb
 apt-get -fy install
 apt-get -y remove --purge python3-openssl python3-cryptography
 apt-get -y --purge autoremove
+pip3 install xmlsig
+pip3 install pyOpenSSL
 pip3 install xlsxwriter
 pip3 install xlrd
 pip3 install xlwt
-pip3 install xmlsig
-pip3 install pyOpenSSL
 rm -r l10n_cr server-tools partner-contact bank-payment community-data-files odooapps
 cd /usr/lib/python3/dist-packages/odoo/addons/
 rm -r cr_customer_query cr_electronic_invoice cr_electronic_invoice_qweb_fe cr_electronic_invoice_pos l10n_cr_country_codes res_currency_cr_adapter onchange_helper base_vat_sanitized account_payment_partner uom_unece account_tax_unece base_unece account_payment_mode accounting_pdf_reports om_account_accountant om_account_asset om_account_budget l10n_cr_hacienda_info_query
