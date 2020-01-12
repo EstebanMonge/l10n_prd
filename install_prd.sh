@@ -31,6 +31,11 @@ git clone --branch 12.0 --depth 1 --single-branch https://github.com/OCA/bank-pa
 git clone --branch 12.0 --depth 1 --single-branch https://github.com/OCA/partner-contact.git
 git clone --branch 12.0 --depth 1 --single-branch https://github.com/OCA/community-data-files.git
 git clone --branch 12.0 --depth 1 --single-branch https://github.com/odoomates/odooapps.git
+mkdir EstebanMonge
+cd EstebanMonge
+git clone --branch 12.0 --depth 1 --single-branch https://github.com/EstebanMonge/odooapps.git
+cd ..
+git clone --branch 12.0 --depth 1 --single-branch https://github.com/OCA/pos.git 
 cd l10n_prd
 mv cr_electronic_invoice cr_electronic_invoice_qweb_fe cr_electronic_invoice_pos l10n_cr_country_codes l10n_cr_hacienda_info_query res_currency_cr_adapter /usr/lib/python3/dist-packages/odoo/addons/
 cd ..
@@ -45,5 +50,6 @@ mv odooapps/accounting_pdf_reports/ /usr/lib/python3/dist-packages/odoo/addons/
 mv odooapps/om_account_accountant/ /usr/lib/python3/dist-packages/odoo/addons/
 mv odooapps/om_account_asset/ /usr/lib/python3/dist-packages/odoo/addons/
 mv odooapps/om_account_budget/ /usr/lib/python3/dist-packages/odoo/addons/
-
+mv EstebanMonge/odooapps/om_pos_service_charge/ /usr/lib/python3/dist-packages/odoo/addons/
+mv pos/pos_ticket_logo/ /usr/lib/python3/dist-packages/odoo/addons/
 systemctl restart odoo
