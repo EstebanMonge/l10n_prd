@@ -19,13 +19,16 @@ pip3 install pyOpenSSL
 pip3 install xlsxwriter
 pip3 install xlrd
 pip3 install xlwt
-rm -r l10n_cr server-tools partner-contact bank-payment community-data-files odooapps
+rm show_open_pos.sh*
+rm upgrade_odoo_dbs.sh*
+rm -r l10n_cr server-tools partner-contact bank-payment community-data-files odooapps pos account-financial-reporting server-ux reporting-engine EstebanMonge
 cd /usr/lib/python3/dist-packages/odoo/addons/
-rm -r cr_customer_query cr_electronic_invoice cr_electronic_invoice_qweb_fe cr_electronic_invoice_pos l10n_cr_country_codes res_currency_cr_adapter onchange_helper base_vat_sanitized account_payment_partner uom_unece account_tax_unece base_unece account_payment_mode accounting_pdf_reports om_account_accountant om_account_asset om_account_budget l10n_cr_hacienda_info_query
-cd $HOME 
+rm -r cr_customer_query cr_electronic_invoice cr_electronic_invoice_qweb_fe cr_electronic_invoice_pos l10n_cr_country_codes res_currency_cr_adapter onchange_helper base_vat_sanitized account_payment_partner uom_unece account_tax_unece base_unece account_payment_mode accounting_pdf_reports om_account_accountant om_account_asset om_account_budget l10n_cr_hacienda_info_query pos_ticket_logo account_financial_report date_range report_xlsx om_pos_service_charge
+cd $HOME
 wget https://raw.githubusercontent.com/EstebanMonge/l10n_prd/master/upgrade_odoo_dbs.sh
 wget https://raw.githubusercontent.com/EstebanMonge/l10n_prd/master/show_open_pos.sh
-git clone https://github.com/EstebanMonge/l10n_prd.git 
+git clone https://github.com/EstebanMonge/l10n_cr.git
+#git clone https://github.com/EstebanMonge/l10n_prd.git
 git clone --branch 12.0 --depth 1 --single-branch https://github.com/OCA/server-tools.git
 git clone --branch 12.0 --depth 1 --single-branch https://github.com/OCA/bank-payment.git
 git clone --branch 12.0 --depth 1 --single-branch https://github.com/OCA/partner-contact.git
@@ -35,11 +38,11 @@ mkdir EstebanMonge
 cd EstebanMonge
 git clone --branch 12.0 --depth 1 --single-branch https://github.com/EstebanMonge/odooapps.git
 cd ..
-git clone --branch 12.0 --depth 1 --single-branch https://github.com/OCA/pos.git 
+git clone --branch 12.0 --depth 1 --single-branch https://github.com/OCA/pos.git
 git clone --branch 12.0 --depth 1 --single-branch https://github.com/OCA/account-financial-reporting.git
 git clone --branch 12.0 --depth 1 --single-branch https://github.com/OCA/server-ux.git
 git clone --branch 12.0 --depth 1 --single-branch https://github.com/OCA/reporting-engine.git
-cd l10n_prd
+cd l10n_cr
 mv cr_electronic_invoice cr_electronic_invoice_qweb_fe cr_electronic_invoice_pos l10n_cr_country_codes l10n_cr_hacienda_info_query res_currency_cr_adapter /usr/lib/python3/dist-packages/odoo/addons/
 cd ..
 mv server-tools/onchange_helper/ /usr/lib/python3/dist-packages/odoo/addons/
@@ -55,7 +58,7 @@ mv odooapps/om_account_asset/ /usr/lib/python3/dist-packages/odoo/addons/
 mv odooapps/om_account_budget/ /usr/lib/python3/dist-packages/odoo/addons/
 mv EstebanMonge/odooapps/om_pos_service_charge/ /usr/lib/python3/dist-packages/odoo/addons/
 mv pos/pos_ticket_logo/ /usr/lib/python3/dist-packages/odoo/addons/
-mv account_financial_report/ /usr/lib/python3/dist-packages/odoo/addons/
+mv account-financial-reporting/account_financial_report/ /usr/lib/python3/dist-packages/odoo/addons/
 mv server-ux/date_range/ /usr/lib/python3/dist-packages/odoo/addons/
 mv reporting-engine/report_xlsx /usr/lib/python3/dist-packages/odoo/addons/
 systemctl restart odoo
