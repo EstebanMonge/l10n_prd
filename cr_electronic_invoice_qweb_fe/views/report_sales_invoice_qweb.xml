@@ -12,7 +12,8 @@
 
 <template id="account.report_invoice_document">
     <div class="article" t-att-data-oe-model="o and o._name" t-att-data-oe-id="o and o.id" t-att-data-oe-lang="o and o.env.context.get('lang')">
-        <div class="header">
+<!--        <div class="header">-->
+        <div>
             <table style="width:100%">
             <tr>
                 <td width="25%">
@@ -397,7 +398,7 @@
                     </thead>
                     <tbody class="invoice_tbody">
                         <tr t-foreach="o.invoice_line_ids" t-as="l" style="height:25px;font-size:16px">
-                            <td><span t-field="l.name"/></td>
+                            <td><span t-field="l.product_id"/> <span t-field="l.name"/></td>
                             <td class="hidden"><span t-field="l.origin"/></td>
                             <td class="text-right">
                                 <span t-field="l.quantity"/>
