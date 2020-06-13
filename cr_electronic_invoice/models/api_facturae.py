@@ -656,12 +656,32 @@ def send_xml_fe(inv, token, date, xml, tipo_ambiente):
                 'tipoIdentificacion': inv.company_id.identification_id.code,
                 'numeroIdentificacion': inv.company_id.vat
             },
-            'receptor': {
-                'tipoIdentificacion': inv.partner_id.identification_id.code,
-                'numeroIdentificacion': inv.partner_id.vat
-            },
             'comprobanteXml': xml_base64
             }
+    if inv.partner_id and inv.partner_id.identification_id and inv.partner_id.identification_id.code:
+        data['receptor']= {
+            'tipoIdentificacion': inv.partner_id.identification_id.code,
+            'numeroIdentificacion': inv.partner_id.vat
+        }
+
+
+    if inv.partner_id.vat:
+        if not inv.partner_id.identification_id:
+            if len(inv.partner_id.vat) == 9:  # cedula fisica
+                id_code = '01'
+            elif len(inv.partner_id.vat) == 10:  # cedula juridica
+                id_code = '02'
+            elif len(inv.partner_id.vat) == 11 or len(inv.partner_id.vat) == 12:  # dimex
+                id_code = '03'
+            else:
+                id_code = '05'
+        else:
+            id_code = inv.partner_id.identification_id.code
+
+        data['receptor']={
+                         'tipoIdentificacion': id_code,
+                         'numeroIdentificacion': inv.partner_id.vat
+                         }
 
     json_hacienda = json.dumps(data)
 
@@ -825,7 +845,7 @@ def get_economic_activities(company):
         return {'status': -1, 'text': 'Excepcion %s' % e}
 
     if 200 <= response.status_code <= 299:
-        _logger.error('MAB - get_economic_activities response: %s' % (response.json()))
+        _logger.debug('MAB - get_economic_activities response: %s' % (response.json()))
         response_json = {
             'status': 200,
             'activities': response.json().get('actividades'),
@@ -917,7 +937,7 @@ def consulta_documentos(self, inv, env, token_m_h, date_cr, xml_firmado):
                              inv.number_electronic)
 
             # limpia el template de los attachments
-            email_template.attachment_ids = [(5)]
+            email_template.attachment_ids = [(5, 0, 0)]
 
 
 def send_message(inv, date_cr, xml, token, env):
@@ -980,28 +1000,28 @@ def load_xml_data(invoice, load_lines, account_id, product_id=False, analytic_ac
         invoice.reference = invoice_xml.xpath("inv:NumeroConsecutivo", namespaces=namespaces)[0].text
 
         invoice.number_electronic = invoice_xml.xpath("inv:Clave", namespaces=namespaces)[0].text
-        activity_node = invoice.env['economic.activity'].search([('code', '=', invoice_xml.xpath("inv:CodigoActividad", namespaces=namespaces))], limit=1)
+        activity_node = invoice_xml.xpath("inv:CodigoActividad", namespaces=namespaces)
+        activity = False
         if activity_node:
             activity_id = activity_node[0].text
+            activity = invoice.env['economic.activity'].with_context(active_test=False).search([('code', '=', activity_id)], limit=1)
         else:
             activity_id = False
-        invoice.economic_activity_id = activity_id
+        invoice.economic_activity_id = activity
         invoice.date_issuance = invoice_xml.xpath("inv:FechaEmision", namespaces=namespaces)[0].text
         invoice.date_invoice = invoice.date_issuance
+        invoice.tipo_documento= False
 
-        emisor = invoice_xml.xpath(
-            "inv:Emisor/inv:Identificacion/inv:Numero",
-            namespaces=namespaces)[0].text
+        emisor = invoice_xml.xpath("inv:Emisor/inv:Identificacion/inv:Numero", namespaces=namespaces)[0].text
 
-        receptor = invoice_xml.xpath(
-            "inv:Receptor/inv:Identificacion/inv:Numero",
-            namespaces=namespaces)[0].text
+        receptor = invoice_xml.xpath("inv:Receptor/inv:Identificacion/inv:Numero", namespaces=namespaces)[0].text
 
         if receptor != invoice.company_id.vat:
             raise UserError('El receptor no corresponde con la compañía actual con identificación ' +
                              receptor + '. Por favor active la compañía correcta.')  # noqa
 
         currency_node = invoice_xml.xpath("inv:ResumenFactura/inv:CodigoTipoMoneda/inv:CodigoMoneda", namespaces=namespaces)
+        
         if currency_node:
             invoice.currency_id = invoice.env['res.currency'].search([('name', '=', currency_node[0].text)], limit=1).id
         else:
@@ -1022,7 +1042,13 @@ def load_xml_data(invoice, load_lines, account_id, product_id=False, analytic_ac
         invoice.account_id = partner.property_account_payable_id
         invoice.payment_term_id = partner.property_supplier_payment_term_id
 
-        _logger.error('MAB - load_lines: %s - account: %s' %
+        payment_method_node = invoice_xml.xpath("inv:MedioPago", namespaces=namespaces)
+        if payment_method_node:
+            invoice.payment_methods_id = invoice.env['payment.methods'].search([('sequence', '=', payment_method_node[0].text)], limit=1)
+        else:
+            invoice.payment_methods_id = partner.payment_methods_id
+
+        _logger.debug('MAB - load_lines: %s - account: %s' %
                       (load_lines, account_id))
 
         # if load_lines and not invoice.invoice_line_ids:
@@ -1061,7 +1087,7 @@ def load_xml_data(invoice, load_lines, account_id, product_id=False, analytic_ac
                     _logger.debug('MAB - tax_code: %s', tax_code)
                     _logger.debug('MAB - tax_amount: %s', tax_amount)
 
-                    if product_id.non_tax_deductible:
+                    if product_id and product_id.non_tax_deductible:
                         tax = invoice.env['account.tax'].search(
                                         [('tax_code', '=', tax_code),
                                         ('amount', '=', tax_amount),
@@ -1074,6 +1100,7 @@ def load_xml_data(invoice, load_lines, account_id, product_id=False, analytic_ac
                             [('tax_code', '=', tax_code),
                             ('amount', '=', tax_amount),
                             ('type_tax_use', '=', 'purchase'),
+                            ('non_tax_deductible', '=', False),
                             ('active', '=', True)],
                             limit=1)
 
@@ -1083,7 +1110,7 @@ def load_xml_data(invoice, load_lines, account_id, product_id=False, analytic_ac
                         # TODO: Add exonerations
                         taxes.append((4, tax.id))
                     else:
-                        if product_id.non_tax_deductible:
+                        if product_id and product_id.non_tax_deductible:
                             raise UserError(_('Tax code %s and percentage %s as non-tax deductible is not registered in the system' % (tax_code, tax_amount)))
                         else:
                             raise UserError(_('Tax code %s and percentage %s is not registered in the system' % (tax_code, tax_amount)))
@@ -1108,7 +1135,7 @@ def load_xml_data(invoice, load_lines, account_id, product_id=False, analytic_ac
 
                 # This must be assigned after line is created
                 invoice_line.invoice_line_tax_ids = taxes
-
+                invoice_line.economic_activity_id = activity
                 new_lines += invoice_line
 
             invoice.invoice_line_ids = new_lines

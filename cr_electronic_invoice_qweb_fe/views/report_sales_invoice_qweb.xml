@@ -12,8 +12,7 @@
 
 <template id="account.report_invoice_document">
     <div class="article" t-att-data-oe-model="o and o._name" t-att-data-oe-id="o and o.id" t-att-data-oe-lang="o and o.env.context.get('lang')">
-<!--        <div class="header">-->
-        <div>
+        <div class="header">
             <table style="width:100%">
             <tr>
                 <td width="25%">
@@ -362,12 +361,7 @@
                             </span>
                         </td>
                         <td>
-                            <span t-if="o.type == 'in_invoice' or o.type == 'in_refund'">
-                                <span t-field="o.create_uid.name"/>
-                            </span>
-                            <span t-if="o.type == 'out_invoice' or o.type == 'out_refund'">
-                                <span t-field="o.user_id.name"/>
-                            </span>
+                            <span t-field="o.user_id.name"/>
                         </td>
                         <td>
                             <strong>TIPO CAMBIO:</strong>
@@ -398,7 +392,7 @@
                     </thead>
                     <tbody class="invoice_tbody">
                         <tr t-foreach="o.invoice_line_ids" t-as="l" style="height:25px;font-size:16px">
-                            <td><span t-field="l.product_id"/> <span t-field="l.name"/></td>
+                            <td><span t-field="l.name"/></td>
                             <td class="hidden"><span t-field="l.origin"/></td>
                             <td class="text-right">
                                 <span t-field="l.quantity"/>
@@ -540,7 +534,7 @@
                     </t>
                 </div>
                 <p class="text-center" style="padding:2px 2px 2px 2px">
-                  Clave:<span t-field="o.number_electronic"/> // Usuario:<span t-field="o.create_uid.name"/><br/>
+                  Clave:<span t-field="o.number_electronic"/> // Usuario:<span t-field="o.user_id.name"/><br/>
                   Autorizada mediante resolución No DGT-R-033-2019 del 20 de junio de 2019</p>
             </t>
             <link href="http://fonts.googleapis.com/css?family=Droid+Sans" rel="stylesheet" type="text/css"/>
